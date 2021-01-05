@@ -26,12 +26,11 @@ def PlotXYZ(arrayImageColorfRGB):
     arrayImageXYZ = np.zeros((arrayImageColorfRGB.shape[0], 3), dtype=float)
 
     index = 0
-    for fRGB in arrayImageColorfRGB:
+    for (index, fRGB) in enumerate(arrayImageColorfRGB):
         fRGB = colour.cctf_decoding(fRGB, function = 'sRGB')
         arrayImageXYZ[index] = colour.RGB_to_XYZ(fRGB, illuminant_RGB, illuminant_XYZ, RGB_to_XYZ_matrix, chromatic_adaptation_transform)  
         if (index % 10 == 0):
             print(index)
-        index += 1
 
     fig = plt.figure(facecolor='black')
     ax = fig.add_subplot(111, projection='3d', facecolor='black')
@@ -40,12 +39,11 @@ def PlotXYZ(arrayImageColorfRGB):
     ax.w_zaxis.set_pane_color((0., 0., 0., 0.))
 
     index = 0
-    for (X, Y, Z) in arrayImageXYZ:
+    for (index, (X, Y, Z)) in enumerate(arrayImageXYZ):
         pointColor = arrayImageColorfRGB[index]
         ax.scatter(X, Y, Z, color = pointColor)
         if (index % 10 == 0):
             print(index)
-        index += 1
     plt.show()
 
 def main():
