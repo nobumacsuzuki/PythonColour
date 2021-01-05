@@ -25,7 +25,6 @@ def PlotXYZ(arrayImageColorfRGB):
     )
     arrayImageXYZ = np.zeros((arrayImageColorfRGB.shape[0], 3), dtype=float)
 
-    index = 0
     for (index, fRGB) in enumerate(arrayImageColorfRGB):
         fRGB = colour.cctf_decoding(fRGB, function = 'sRGB')
         arrayImageXYZ[index] = colour.RGB_to_XYZ(fRGB, illuminant_RGB, illuminant_XYZ, RGB_to_XYZ_matrix, chromatic_adaptation_transform)  
@@ -38,7 +37,6 @@ def PlotXYZ(arrayImageColorfRGB):
     ax.w_yaxis.set_pane_color((0., 0., 0., 0.))
     ax.w_zaxis.set_pane_color((0., 0., 0., 0.))
 
-    index = 0
     for (index, (X, Y, Z)) in enumerate(arrayImageXYZ):
         pointColor = arrayImageColorfRGB[index]
         ax.scatter(X, Y, Z, color = pointColor)
@@ -47,6 +45,7 @@ def PlotXYZ(arrayImageColorfRGB):
     plt.show()
 
 def main():
+    # this is a test array for primaries, sub-primatries etc...
     arrayImageColorfRGB = np.array(
         [[255., 0., 0.],
         [0., 255., 0.],
@@ -73,7 +72,7 @@ def main():
     arrayImageColorRGB = arrayImageColorRGB.reshape(imageHeight * imageWidth, 3)
     arrayImageColorfRGB = arrayImageColorRGB.astype(np.float)
     arrayImageColorfRGB = arrayImageColorfRGB / 255.0
-    PlotXYZ(arrayImageColorfRGB[::2000]) # take 512 x 512 / 1000, 262 points
+    PlotXYZ(arrayImageColorfRGB[::2000]) # take 512 x 512 / 2000, 131 points
 
 if __name__ == "__main__":
     main()
