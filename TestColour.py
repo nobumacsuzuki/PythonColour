@@ -44,6 +44,15 @@ def PlotXYZ(arrayImageColorfRGB):
             print(index)
     plt.show()
 
+def ConvertBGR2fRGB(arrayImageColorBGR):
+    arrayImageColorRGB = cv2.cvtColor(arrayImageColorBGR, cv2.COLOR_BGR2RGB)
+    imageHeight = arrayImageColorRGB.shape[0]
+    imageWidth = arrayImageColorRGB.shape[1]
+    arrayImageColorRGB = arrayImageColorRGB.reshape(imageHeight * imageWidth, 3)
+    arrayImageColorfRGB = arrayImageColorRGB.astype(np.float)
+    arrayImageColorfRGB = arrayImageColorfRGB / 255.0
+    return arrayImageColorfRGB
+
 def main():
     # this is a test array for primaries, sub-primatries etc...
     arrayImageColorfRGB = np.array(
@@ -65,13 +74,8 @@ def main():
     PlotXYZ(arrayImageColorfRGB)
 
     filename = "lena_512x512.bmp"
-    arrayImageColorBGR = cv2.imread(filename, cv2.IMREAD_COLOR) 
-    arrayImageColorRGB = cv2.cvtColor(arrayImageColorBGR, cv2.COLOR_BGR2RGB)
-    imageHeight = arrayImageColorRGB.shape[0]
-    imageWidth = arrayImageColorRGB.shape[1]
-    arrayImageColorRGB = arrayImageColorRGB.reshape(imageHeight * imageWidth, 3)
-    arrayImageColorfRGB = arrayImageColorRGB.astype(np.float)
-    arrayImageColorfRGB = arrayImageColorfRGB / 255.0
+    arrayImageColorBGR = cv2.imread(filename, cv2.IMREAD_COLOR)
+    arrayImageColorfRGB = ConvertBGR2fRGB(arrayImageColorBGR) 
     PlotXYZ(arrayImageColorfRGB[::2000]) # take 512 x 512 / 2000, 131 points
 
 if __name__ == "__main__":
