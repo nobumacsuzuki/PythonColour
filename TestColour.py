@@ -44,39 +44,43 @@ def PlotXYZ(arrayImageColorfRGB):
             print(index)
     plt.show()
 
-def ConvertBGR2fRGB(arrayImageColorBGR):
-    arrayImageColorRGB = cv2.cvtColor(arrayImageColorBGR, cv2.COLOR_BGR2RGB)
-    imageHeight = arrayImageColorRGB.shape[0]
-    imageWidth = arrayImageColorRGB.shape[1]
-    arrayImageColorRGB = arrayImageColorRGB.reshape(imageHeight * imageWidth, 3)
+def ConvertRGB2fRGB(arrayImageColor, isBGR):
+    if (isBGR):
+        arrayImageColorRGB = cv2.cvtColor(arrayImageColor, cv2.COLOR_BGR2RGB)
+    else:
+        arrayImageColorRGB = arrayImageColor
+    print(arrayImageColorRGB.ndim)
+    if (arrayImageColorRGB.ndim == 3):
+        imageHeight = arrayImageColorRGB.shape[0]
+        imageWidth = arrayImageColorRGB.shape[1]
+        arrayImageColorRGB = arrayImageColorRGB.reshape(imageHeight * imageWidth, 3)
     arrayImageColorfRGB = arrayImageColorRGB.astype(np.float)
     arrayImageColorfRGB = arrayImageColorfRGB / 255.0
     return arrayImageColorfRGB
 
 def main():
     # this is a test array for primaries, sub-primatries etc...
-    arrayImageColorfRGB = np.array(
-        [[255., 0., 0.],
-        [0., 255., 0.],
-        [0., 0., 255.],
-        [128., 0., 0.],
-        [0., 128., 0.],
-        [0., 0., 128.],
-        [255.,  255., 0.],
-        [0., 255., 255.],
-        [255., 0., 255.],
-        [128., 128., 0.],
-        [0., 128., 128.],
-        [128., 0., 128.],
-        [255., 255., 255.]]
+    arrayImageColorRGB = np.array(
+        [[255, 0, 0],
+        [0, 255, 0],
+        [0, 0, 255],
+        [128, 0, 0],
+        [0, 128, 0],
+        [0, 0, 128],
+        [255,  255, 0],
+        [0, 255, 255],
+        [255, 0, 255],
+        [128, 128, 0],
+        [0, 128, 128],
+        [128, 0, 128],
+        [255, 255, 255]]
     )
-    arrayImageColorfRGB = arrayImageColorfRGB / 255.0
-    PlotXYZ(arrayImageColorfRGB)
+    PlotXYZ(ConvertRGB2fRGB(arrayImageColorRGB, isBGR = False))
 
+    # visualize Lena image in CIE-XYZ
     filename = "lena_512x512.bmp"
     arrayImageColorBGR = cv2.imread(filename, cv2.IMREAD_COLOR)
-    arrayImageColorfRGB = ConvertBGR2fRGB(arrayImageColorBGR) 
-    PlotXYZ(arrayImageColorfRGB[::2000]) # take 512 x 512 / 2000, 131 points
+    PlotXYZ(ConvertRGB2fRGB(arrayImageColorBGR, isBGR = True)[::2000]) # take 512 x 512 / 2000, 131 points
 
 if __name__ == "__main__":
     main()
